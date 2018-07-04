@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grysta.crud.dao.HouseMapper">
+  <resultMap id="BaseResultMap" type="com.grysta.crud.bean.House">
+    <id column="house_id" jdbcType="INTEGER" property="houseId" />
+    <result column="house_address" jdbcType="VARCHAR" property="houseAddress" />
+    <result column="house_type" jdbcType="CHAR" property="houseType" />
+    <result column="house_people" jdbcType="INTEGER" property="housePeople" />
+    <result column="house_price" jdbcType="INTEGER" property="housePrice" />
+    <result column="house_landlord_id" jdbcType="INTEGER" property="houseLandlordId" />
+    <result column="house_canlive" jdbcType="CHAR" property="houseCanlive" />
+  </resultMap>
+  <resultMap type="com.grysta.crud.bean.House" id="WithLandlordResultMap">
+  	<id column="house_id" jdbcType="INTEGER" property="houseId" />
+    <result column="house_address" jdbcType="VARCHAR" property="houseAddress" />
+    <result column="house_type" jdbcType="CHAR" property="houseType" />
+    <result column="house_people" jdbcType="INTEGER" property="housePeople" />
+    <result column="house_price" jdbcType="INTEGER" property="housePrice" />
+    <result column="house_landlord_id" jdbcType="INTEGER" property="houseLandlordId" />
+    <result column="house_canlive" jdbcType="CHAR" property="houseCanlive" />
+    <association property="landlord" javaType="com.grysta.crud.bean.Landlord">
+    	<id column="landlord_id" property="landlordId"/>
+    	<result column="landlord_name" property="landlordName"/>
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    house_id, house_address, house_type, house_people, house_price, house_landlord_id, 
+    house_canlive
+  </sql>
+  <sql id="WithLandlord_Column_List">
+  	h.house_id, h.house_address, h.house_type, h.house_people, h.house_price, l.landlord_id, l.landlord_name, 
+    h.house_canlive
+  </sql>
+  <select id="selectByExampleWithLandlord" resultMap="WithLandlordResultMap">
+  	select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithLandlord_Column_List" />
+    from tbl_house h left join tbl_landlord l on h.`house_landlord_id` = l.`landlord_id`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKeyWithLandlord" resultMap="WithLandlordResultMap">
+  	select 
+    <include refid="WithLandlord_Column_List" />
+    from tbl_house h left join tbl_landlord l on h.`house_landlord_id` = l.`landlord_id`
+    where house_id = #{houseId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByExample" parameterType="com.grysta.crud.bean.HouseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tbl_house
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_house
+    where house_id = #{houseId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_house
+    where house_id = #{houseId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.grysta.crud.bean.HouseExample">
+    delete from tbl_house
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.grysta.crud.bean.House">
+    insert into tbl_house (house_id, house_address, house_type, 
+      house_people, house_price, house_landlord_id, 
+      house_canlive)
+    values (#{houseId,jdbcType=INTEGER}, #{houseAddress,jdbcType=VARCHAR}, #{houseType,jdbcType=CHAR}, 
+      #{housePeople,jdbcType=INTEGER}, #{housePrice,jdbcType=INTEGER}, #{houseLandlordId,jdbcType=INTEGER}, 
+      #{houseCanlive,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.grysta.crud.bean.House">
+    insert into tbl_house
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="houseId != null">
+        house_id,
+      </if>
+      <if test="houseAddress != null">
+        house_address,
+      </if>
+      <if test="houseType != null">
+        house_type,
+      </if>
+      <if test="housePeople != null">
+        house_people,
+      </if>
+      <if test="housePrice != null">
+        house_price,
+      </if>
+      <if test="houseLandlordId != null">
+        house_landlord_id,
+      </if>
+      <if test="houseCanlive != null">
+        house_canlive,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="houseId != null">
+        #{houseId,jdbcType=INTEGER},
+      </if>
+      <if test="houseAddress != null">
+        #{houseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null">
+        #{houseType,jdbcType=CHAR},
+      </if>
+      <if test="housePeople != null">
+        #{housePeople,jdbcType=INTEGER},
+      </if>
+      <if test="housePrice != null">
+        #{housePrice,jdbcType=INTEGER},
+      </if>
+      <if test="houseLandlordId != null">
+        #{houseLandlordId,jdbcType=INTEGER},
+      </if>
+      <if test="houseCanlive != null">
+        #{houseCanlive,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.grysta.crud.bean.HouseExample" resultType="java.lang.Long">
+    select count(*) from tbl_house
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tbl_house
+    <set>
+      <if test="record.houseId != null">
+        house_id = #{record.houseId,jdbcType=INTEGER},
+      </if>
+      <if test="record.houseAddress != null">
+        house_address = #{record.houseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.houseType != null">
+        house_type = #{record.houseType,jdbcType=CHAR},
+      </if>
+      <if test="record.housePeople != null">
+        house_people = #{record.housePeople,jdbcType=INTEGER},
+      </if>
+      <if test="record.housePrice != null">
+        house_price = #{record.housePrice,jdbcType=INTEGER},
+      </if>
+      <if test="record.houseLandlordId != null">
+        house_landlord_id = #{record.houseLandlordId,jdbcType=INTEGER},
+      </if>
+      <if test="record.houseCanlive != null">
+        house_canlive = #{record.houseCanlive,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tbl_house
+    set house_id = #{record.houseId,jdbcType=INTEGER},
+      house_address = #{record.houseAddress,jdbcType=VARCHAR},
+      house_type = #{record.houseType,jdbcType=CHAR},
+      house_people = #{record.housePeople,jdbcType=INTEGER},
+      house_price = #{record.housePrice,jdbcType=INTEGER},
+      house_landlord_id = #{record.houseLandlordId,jdbcType=INTEGER},
+      house_canlive = #{record.houseCanlive,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.grysta.crud.bean.House">
+    update tbl_house
+    <set>
+      <if test="houseAddress != null">
+        house_address = #{houseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null">
+        house_type = #{houseType,jdbcType=CHAR},
+      </if>
+      <if test="housePeople != null">
+        house_people = #{housePeople,jdbcType=INTEGER},
+      </if>
+      <if test="housePrice != null">
+        house_price = #{housePrice,jdbcType=INTEGER},
+      </if>
+      <if test="houseLandlordId != null">
+        house_landlord_id = #{houseLandlordId,jdbcType=INTEGER},
+      </if>
+      <if test="houseCanlive != null">
+        house_canlive = #{houseCanlive,jdbcType=CHAR},
+      </if>
+    </set>
+    where house_id = #{houseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.grysta.crud.bean.House">
+    update tbl_house
+    set house_address = #{houseAddress,jdbcType=VARCHAR},
+      house_type = #{houseType,jdbcType=CHAR},
+      house_people = #{housePeople,jdbcType=INTEGER},
+      house_price = #{housePrice,jdbcType=INTEGER},
+      house_landlord_id = #{houseLandlordId,jdbcType=INTEGER},
+      house_canlive = #{houseCanlive,jdbcType=CHAR}
+    where house_id = #{houseId,jdbcType=INTEGER}
+  </update>
+</mapper>

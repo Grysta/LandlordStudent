@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grysta.crud.dao.MeetingDateMapper">
+  <resultMap id="BaseResultMap" type="com.grysta.crud.bean.MeetingDate">
+    <id column="date_id" jdbcType="INTEGER" property="dateId" />
+    <result column="date_landlord_id" jdbcType="INTEGER" property="dateLandlordId" />
+    <result column="date_student_id" jdbcType="INTEGER" property="dateStudentId" />
+    <result column="date_date" jdbcType="DATE" property="dateDate" />
+    <result column="date_address" jdbcType="VARCHAR" property="dateAddress" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    date_id, date_landlord_id, date_student_id, date_date, date_address
+  </sql>
+  <select id="selectByExample" parameterType="com.grysta.crud.bean.MeetingDateExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tbl_date
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_date
+    where date_id = #{dateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_date
+    where date_id = #{dateId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.grysta.crud.bean.MeetingDateExample">
+    delete from tbl_date
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.grysta.crud.bean.MeetingDate">
+    insert into tbl_date (date_id, date_landlord_id, date_student_id, 
+      date_date, date_address)
+    values (#{dateId,jdbcType=INTEGER}, #{dateLandlordId,jdbcType=INTEGER}, #{dateStudentId,jdbcType=INTEGER}, 
+      #{dateDate,jdbcType=DATE}, #{dateAddress,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.grysta.crud.bean.MeetingDate">
+    insert into tbl_date
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dateId != null">
+        date_id,
+      </if>
+      <if test="dateLandlordId != null">
+        date_landlord_id,
+      </if>
+      <if test="dateStudentId != null">
+        date_student_id,
+      </if>
+      <if test="dateDate != null">
+        date_date,
+      </if>
+      <if test="dateAddress != null">
+        date_address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dateId != null">
+        #{dateId,jdbcType=INTEGER},
+      </if>
+      <if test="dateLandlordId != null">
+        #{dateLandlordId,jdbcType=INTEGER},
+      </if>
+      <if test="dateStudentId != null">
+        #{dateStudentId,jdbcType=INTEGER},
+      </if>
+      <if test="dateDate != null">
+        #{dateDate,jdbcType=DATE},
+      </if>
+      <if test="dateAddress != null">
+        #{dateAddress,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.grysta.crud.bean.MeetingDateExample" resultType="java.lang.Long">
+    select count(*) from tbl_date
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tbl_date
+    <set>
+      <if test="record.dateId != null">
+        date_id = #{record.dateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dateLandlordId != null">
+        date_landlord_id = #{record.dateLandlordId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dateStudentId != null">
+        date_student_id = #{record.dateStudentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dateDate != null">
+        date_date = #{record.dateDate,jdbcType=DATE},
+      </if>
+      <if test="record.dateAddress != null">
+        date_address = #{record.dateAddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tbl_date
+    set date_id = #{record.dateId,jdbcType=INTEGER},
+      date_landlord_id = #{record.dateLandlordId,jdbcType=INTEGER},
+      date_student_id = #{record.dateStudentId,jdbcType=INTEGER},
+      date_date = #{record.dateDate,jdbcType=DATE},
+      date_address = #{record.dateAddress,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.grysta.crud.bean.MeetingDate">
+    update tbl_date
+    <set>
+      <if test="dateLandlordId != null">
+        date_landlord_id = #{dateLandlordId,jdbcType=INTEGER},
+      </if>
+      <if test="dateStudentId != null">
+        date_student_id = #{dateStudentId,jdbcType=INTEGER},
+      </if>
+      <if test="dateDate != null">
+        date_date = #{dateDate,jdbcType=DATE},
+      </if>
+      <if test="dateAddress != null">
+        date_address = #{dateAddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where date_id = #{dateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.grysta.crud.bean.MeetingDate">
+    update tbl_date
+    set date_landlord_id = #{dateLandlordId,jdbcType=INTEGER},
+      date_student_id = #{dateStudentId,jdbcType=INTEGER},
+      date_date = #{dateDate,jdbcType=DATE},
+      date_address = #{dateAddress,jdbcType=VARCHAR}
+    where date_id = #{dateId,jdbcType=INTEGER}
+  </update>
+</mapper>

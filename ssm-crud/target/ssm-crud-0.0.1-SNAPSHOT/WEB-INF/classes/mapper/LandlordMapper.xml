@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grysta.crud.dao.LandlordMapper">
+  <resultMap id="BaseResultMap" type="com.grysta.crud.bean.Landlord">
+    <id column="landlord_id" jdbcType="INTEGER" property="landlordId" />
+    <result column="landlord_name" jdbcType="VARCHAR" property="landlordName" />
+    <result column="landlord_username" jdbcType="VARCHAR" property="landlordUsername" />
+    <result column="landlord_password" jdbcType="VARCHAR" property="landlordPassword" />
+    <result column="landlord_address" jdbcType="VARCHAR" property="landlordAddress" />
+    <result column="landlord_phone" jdbcType="VARCHAR" property="landlordPhone" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    landlord_id, landlord_name, landlord_username, landlord_password, landlord_address, 
+    landlord_phone
+  </sql>
+  <select id="selectByExample" parameterType="com.grysta.crud.bean.LandlordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tbl_landlord
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_landlord
+    where landlord_id = #{landlordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_landlord
+    where landlord_id = #{landlordId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.grysta.crud.bean.LandlordExample">
+    delete from tbl_landlord
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.grysta.crud.bean.Landlord">
+    insert into tbl_landlord (landlord_id, landlord_name, landlord_username, 
+      landlord_password, landlord_address, landlord_phone
+      )
+    values (#{landlordId,jdbcType=INTEGER}, #{landlordName,jdbcType=VARCHAR}, #{landlordUsername,jdbcType=VARCHAR}, 
+      #{landlordPassword,jdbcType=VARCHAR}, #{landlordAddress,jdbcType=VARCHAR}, #{landlordPhone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.grysta.crud.bean.Landlord">
+    insert into tbl_landlord
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="landlordId != null">
+        landlord_id,
+      </if>
+      <if test="landlordName != null">
+        landlord_name,
+      </if>
+      <if test="landlordUsername != null">
+        landlord_username,
+      </if>
+      <if test="landlordPassword != null">
+        landlord_password,
+      </if>
+      <if test="landlordAddress != null">
+        landlord_address,
+      </if>
+      <if test="landlordPhone != null">
+        landlord_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="landlordId != null">
+        #{landlordId,jdbcType=INTEGER},
+      </if>
+      <if test="landlordName != null">
+        #{landlordName,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordUsername != null">
+        #{landlordUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordPassword != null">
+        #{landlordPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordAddress != null">
+        #{landlordAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordPhone != null">
+        #{landlordPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.grysta.crud.bean.LandlordExample" resultType="java.lang.Long">
+    select count(*) from tbl_landlord
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tbl_landlord
+    <set>
+      <if test="record.landlordId != null">
+        landlord_id = #{record.landlordId,jdbcType=INTEGER},
+      </if>
+      <if test="record.landlordName != null">
+        landlord_name = #{record.landlordName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.landlordUsername != null">
+        landlord_username = #{record.landlordUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.landlordPassword != null">
+        landlord_password = #{record.landlordPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.landlordAddress != null">
+        landlord_address = #{record.landlordAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.landlordPhone != null">
+        landlord_phone = #{record.landlordPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tbl_landlord
+    set landlord_id = #{record.landlordId,jdbcType=INTEGER},
+      landlord_name = #{record.landlordName,jdbcType=VARCHAR},
+      landlord_username = #{record.landlordUsername,jdbcType=VARCHAR},
+      landlord_password = #{record.landlordPassword,jdbcType=VARCHAR},
+      landlord_address = #{record.landlordAddress,jdbcType=VARCHAR},
+      landlord_phone = #{record.landlordPhone,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.grysta.crud.bean.Landlord">
+    update tbl_landlord
+    <set>
+      <if test="landlordName != null">
+        landlord_name = #{landlordName,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordUsername != null">
+        landlord_username = #{landlordUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordPassword != null">
+        landlord_password = #{landlordPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordAddress != null">
+        landlord_address = #{landlordAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="landlordPhone != null">
+        landlord_phone = #{landlordPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where landlord_id = #{landlordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.grysta.crud.bean.Landlord">
+    update tbl_landlord
+    set landlord_name = #{landlordName,jdbcType=VARCHAR},
+      landlord_username = #{landlordUsername,jdbcType=VARCHAR},
+      landlord_password = #{landlordPassword,jdbcType=VARCHAR},
+      landlord_address = #{landlordAddress,jdbcType=VARCHAR},
+      landlord_phone = #{landlordPhone,jdbcType=VARCHAR}
+    where landlord_id = #{landlordId,jdbcType=INTEGER}
+  </update>
+</mapper>
